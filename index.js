@@ -5,7 +5,6 @@ import { Bot } from 'grammy';
 import { openai } from '@ai-sdk/openai';
 import { generateText, tool } from 'ai';
 import { z } from 'zod';
-import { markdownToTelegramMessages } from '@artem_molchanov/md-lib';
 import dedent from "dedent";
 import { google } from 'googleapis';
 
@@ -852,11 +851,7 @@ bot.on('message:contact', async (ctx) => {
     const modelOut = (text && text.trim()) ? text.trim() : '';
     const out = (toolOut && toolOut.trim()) || modelOut || 'Готово!';
     messages.push({ role: 'assistant', content: out });
-    
-    const mdMessages = markdownToTelegramMessages(out, { maxLength: 4096 });
-    for (const m of mdMessages) {
-      await ctx.api.sendMessage(ctx.chat.id, m.text, { entities: m.entities });
-    }
+    await ctx.api.sendMessage(ctx.chat.id, out);
   } catch (err) {
     console.error('Handler error:', err);
     await ctx.reply('Упс, что-то пошло не так. Попробуйте ещё раз позже.');
@@ -884,11 +879,7 @@ bot.on('message:text', async (ctx) => {
     const out = (toolOut && toolOut.trim()) || modelOut || 'Готово!';
     messages.push({ role: 'assistant', content: out });
 
-    const mdMessages = markdownToTelegramMessages(out, { maxLength: 4096 });
     await ctx.api.sendMessage(ctx.chat.id, out);
-    // for (const m of mdMessages) {
-    //   await ctx.api.sendMessage(ctx.chat.id, m.text, { entities: m.entities });
-    // }
   } catch (err) {
     console.error('Handler error:', err);
     await ctx.reply('Упс, что-то пошло не так. Попробуйте ещё раз позже.');

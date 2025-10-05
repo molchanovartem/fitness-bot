@@ -13,7 +13,6 @@
   "description": "",
   "dependencies": {
     "@ai-sdk/openai": "^2.0.23",
-    "@artem_molchanov/md-lib": "^1.0.6",
     "ai": "^5.0.30",
     "dedent": "^1.7.0",
     "dotenv": "^17.2.2",
